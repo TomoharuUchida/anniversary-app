@@ -24,6 +24,7 @@ const Login = (props) => {
         if (user) {
             navigate("/home")
         }
+// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, loading]);
     
   return (

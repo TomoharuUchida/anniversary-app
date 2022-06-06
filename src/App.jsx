@@ -6,7 +6,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db, logout } from "./firebase";
 import { collection, query, onSnapshot, addDoc,where } from "firebase/firestore";
 
-import DateFnsUtils from '@date-io/date-fns'
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 
@@ -15,6 +14,8 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField'
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
+import Box from '@mui/material/Box';
+
 
 import AnniversaryItem from './AnniversaryItem'
 
@@ -29,7 +30,7 @@ const App = (props) => {
   // 記念日のtextarea
   const [input, setInput] = useState("");
   // 日付の入力のカレンダー
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(null);
   // カレンダーの選択を反映させる関数
   const changeDateHandler = (newDate) => {
     setDate(newDate)
@@ -59,6 +60,7 @@ const App = (props) => {
     if (loading) return;
     if (!user) return navigate("/")
     fetchUserAnniversary();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[user, loading])
 
   const newTask = async (e) => {
@@ -85,7 +87,16 @@ const App = (props) => {
           }
         />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker value={date} format="P" onChange={changeDateHandler} />
+          <Box sx={{ m: 2, width: '25ch' }}>
+            <DatePicker
+              label="DatePicker"
+              value={date}
+              onChange={changeDateHandler}
+              inputFormat='yyyy/MM/dd'
+              mask='____/__/__'
+              renderInput={(params)=><TextField{...params}/>}
+            />
+          </Box>
         </LocalizationProvider>
       </FormControl>
       <AddIcon
