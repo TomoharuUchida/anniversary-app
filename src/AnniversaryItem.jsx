@@ -6,10 +6,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
 import Grid from "@mui/material/Grid";
+import Box from '@mui/material/Box';
 
 import { db } from "./firebase";
 //Firebase ver9 compliant (modular)
 import { doc, collection, setDoc, deleteDoc } from "firebase/firestore";
+import Typography from '@mui/material/Typography';
 
 
 function convertTimestampToDatetime(timestamp) {
@@ -20,7 +22,7 @@ function convertTimestampToDatetime(timestamp) {
   const H = _d.getHours().toString().padStart(2, "0");
   const i = _d.getMinutes().toString().padStart(2, "0");
   const s = _d.getSeconds().toString().padStart(2, "0");
-    return `${Y}/${m}/${d}`;
+    return `${m}月 ${d}日`;
     // return `${Y}/${m}/${d} ${H}:${i}:${s}`;
 }
 
@@ -48,9 +50,31 @@ const AnniversaryItem = (props) => {
   return (
     
     <ListItem>
-          <p>{props.title}</p>
-          <p>{convertTimestampToDatetime(props.date)}</p>
-          <Grid container justifyContent="flex-end">
+        <Box
+            sx={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                flexDirection: 'column',
+                p:2,
+                bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : '#eaf6fd'),
+            }}
+        >
+          <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                mb:2
+            }}
+          >
+            <Typography sx={{mr:2}}>{props.title}</Typography>
+            <Typography>{convertTimestampToDatetime(props.date)}</Typography>
+          </Box>
+          <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'row',
+            }}
+          >
               <TextField
                   InputLabelProps={{
                       shrink:true,
@@ -60,13 +84,17 @@ const AnniversaryItem = (props) => {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
               />
-          </Grid>
-          <EditIcon
+            <EditIcon
+              sx={{ m: 2 }}
               onClick={editAnniversary}
-          />
-          <DeleteIcon
-              onClick={deleteAnniversaries}
-          />
+            />
+            <DeleteIcon
+                sx={{ mt: 2,mb:2 }}
+                onClick={deleteAnniversaries}
+            />
+          </Box>
+        </Box>
+          
     </ListItem>
     
   )

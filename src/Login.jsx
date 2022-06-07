@@ -69,7 +69,7 @@ const Login = (props) => {
                 ? ()=>loginWithEmailAndPassword(email, password)
                 : () => registerWithEmailAndPassword(email, password)
                   
-        }
+              }
           >
               {isLogin ? "Login" : "register"}
 

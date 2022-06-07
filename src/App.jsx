@@ -15,8 +15,11 @@ import TextField from '@mui/material/TextField'
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 
 
+import styles from "./App.css"
 import AnniversaryItem from './AnniversaryItem'
 
 
@@ -70,38 +73,49 @@ const App = (props) => {
   };
   return (
     <div>
-      <h1>あなたの記念日</h1>
-      <LogoutIcon
-        onClick={()=>logout()}
-      />
-
-      <br/>
-      <FormControl>
-        <TextField
-          InputLabelProps={{
-            shrink: true,
-          }}
-          label="何の記念日?"
-          value={input}
-          onChange={(e) => setInput(e.target.value)
-          }
+      <Container>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            p:1,
+          }}>
+          <Typography sx={{ mr: 2 }} variant="h6" align="center">
+            あなたの記念日
+          </Typography>
+          <LogoutIcon
+            onClick={() => logout()}
+          />
+        </Box>
+        
+        <br/>
+        <FormControl>
+          <TextField
+            InputProps={{
+              shrink: true
+            }}
+            label="何の記念日?"
+            value={input}
+            onChange={(e) => setInput(e.target.value)
+            }
+          />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <Box sx={{ mt: 2, width: '25ch' }}>
+              <DatePicker
+                label="日付を入力"
+                value={date}
+                onChange={changeDateHandler}
+                inputFormat='yyyy/MM/dd'
+                mask='____/__/__'
+                renderInput={(params)=><TextField{...params}/>}
+              />
+            </Box>
+          </LocalizationProvider>
+        </FormControl>
+        <AddIcon
+            disabled={!input} onClick={newTask}
         />
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <Box sx={{ m: 2, width: '25ch' }}>
-            <DatePicker
-              label="DatePicker"
-              value={date}
-              onChange={changeDateHandler}
-              inputFormat='yyyy/MM/dd'
-              mask='____/__/__'
-              renderInput={(params)=><TextField{...params}/>}
-            />
-          </Box>
-        </LocalizationProvider>
-      </FormControl>
-      <AddIcon
-          disabled={!input} onClick={newTask}
-      />
+      </Container>
       
       <List>
         {tasks.map((item) => (
