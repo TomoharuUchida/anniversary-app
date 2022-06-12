@@ -29,7 +29,7 @@ const App = (props) => {
   // 認証の状態管理
   const [user, loading, password] = useAuthState(auth);
   // firestoreから取得したデータ
-  const [tasks, setTasks] = useState([{ id: "", title: "",date:"" }]);
+  const [anniversaries, setAnniversaries] = useState([{ id: "", title: "",date:"" }]);
   // 記念日のtextarea
   const [input, setInput] = useState("");
   // 日付の入力のカレンダー
@@ -45,7 +45,7 @@ const App = (props) => {
     try {
       const q = query(collection(db, "anniversaries"), where("uid", "==", user?.uid));
       const unsub = onSnapshot(q, (querySnapshot) => {
-      setTasks(
+      setAnniversaries(
         querySnapshot.docs.map((doc) => ({
           id: doc.id,
           title: doc.data().title,
@@ -66,7 +66,7 @@ const App = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[user, loading])
 
-  const newTask = async (e) => {
+  const newAnniversary = async (e) => {
     //Firebase ver9 compliant (modular)
     await addDoc(collection(db, "anniversaries"), { title: input,date:date,uid:user.uid });
     setInput("");
@@ -92,7 +92,7 @@ const App = (props) => {
         <FormControl>
           <TextField
             InputProps={{
-              shrink: true
+              shrink: "true"
             }}
             label="何の記念日?"
             value={input}
@@ -113,12 +113,12 @@ const App = (props) => {
           </LocalizationProvider>
         </FormControl>
         <AddIcon
-            disabled={!input} onClick={newTask}
+            disabled={!input} onClick={newAnniversary}
         />
       </Container>
       
       <List>
-        {tasks.map((item) => (
+        {anniversaries.map((item) => (
           <AnniversaryItem key={item.id} id={item.id} title={item.title} date={item.date}/>
       ))}
       </List>

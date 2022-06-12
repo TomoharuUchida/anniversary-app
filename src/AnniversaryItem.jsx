@@ -57,6 +57,7 @@ const AnniversaryItem = (props) => {
                 flexDirection: 'column',
                 p:2,
                 bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : '#eaf6fd'),
+                borderRadius: 2,
             }}
         >
           <Box
