@@ -13,12 +13,35 @@ import { db } from "./firebase";
 import { doc, collection, setDoc, deleteDoc } from "firebase/firestore";
 import Typography from '@mui/material/Typography';
 
+// 'あと--日を表示する'
+const nowDate = new Date();
+const dnum = nowDate.getTime();
+// 記念日の日付の数値(経過ミリ秒)を得る
+const getAnniversaryDate = function (timestamp) {
+  const _d = timestamp ? new Date(timestamp * 1000) : new Date();
+  const Y = nowDate.getFullYear();
+  const m = (_d.getMonth() + 1).toString().padStart(2, "0");
+  const d = _d.getDate().toString().padStart(2, "0");
+  const H = _d.getHours().toString().padStart(2, "0");
+  const i = _d.getMinutes().toString().padStart(2, "0");
+  const s = _d.getSeconds().toString().padStart(2, "0");
+
+  const AnniversaryDate = new Date(Y, Number(m) - 1, d);
+  const nextYearAnniversaryDate = new Date(Number(Y)+1,Number(m)-1,d);  
+  const anniversaryNum = AnniversaryDate.getTime();
+
+  const diffMSec = anniversaryNum - dnum >0 ? anniversaryNum - dnum : nextYearAnniversaryDate - dnum;
+  const diffDays = diffMSec / (1000 * 60 * 60 * 24);
+  const showDays = Math.ceil(diffDays);
+
+  return showDays === 365 ? '今日' :`あと${showDays}日`
+}
 
 function convertTimestampToDatetime(timestamp) {
   const _d = timestamp ? new Date(timestamp * 1000) : new Date();
   const Y = _d.getFullYear()-1969;
-  const m = (_d.getMonth() + 1).toString().padStart(2, "0");
-  const d = _d.getDate().toString().padStart(2, "0");
+  const m = (_d.getMonth() + 1).toString();
+  const d = _d.getDate().toString();
   const H = _d.getHours().toString().padStart(2, "0");
   const i = _d.getMinutes().toString().padStart(2, "0");
   const s = _d.getSeconds().toString().padStart(2, "0");
@@ -69,6 +92,7 @@ const AnniversaryItem = (props) => {
           >
             <Typography sx={{mr:2}}>{props.title}</Typography>
             <Typography>{convertTimestampToDatetime(props.date)}</Typography>
+            <Typography sx={{ml:2}}>{getAnniversaryDate(props.date) }</Typography>
           </Box>
           <Box
             sx={{
